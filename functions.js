@@ -10,6 +10,7 @@ const chooseTo = document.getElementById("choose-to");
 const errorEventCreation = document.getElementById("error-event-creation");
 const grid = document.querySelector('.grid');
 const cDaysDisplay = document.querySelectorAll('.day');
+const weekDisplay = document.getElementById("week-display");
 const colorChoice = document.getElementById("color-choice");
 const colorPicker = document.getElementById("color-picker");
 const colorOkButton = document.getElementById("color-ok-button");
@@ -47,6 +48,8 @@ const firstDayDatabase = {
     2049: 4,
     2050: 5,
 }
+
+let cWeekDates = [];  // array for saving the dates of the week
 
 // checks for leap year
 function checkLeapYear(checkLYear) {
@@ -94,7 +97,7 @@ function calData(givenDate, givenMonth, givenYear) {
     cMonthDays = 0;
     previousMonth = ['', 0, 0];
     nextMonth = ['', 0, 0];
-    leapYear = checkLeapYear(givenYear);
+    let leapYear = checkLeapYear(givenYear);
 
     let givenMonthAdapt = givenMonth - 1;
     for (let i = 0; i <= givenMonthAdapt; i++) { //goes through (i + 1) amount of months and adds up total amount of days
@@ -267,7 +270,7 @@ function displayWeek(given_Date, given_Month, given_Year) {
 
     // CODE THAT DISPLAYS THE SEPARATE WEEK DATES
     let dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    findWeekDates(cDate, cMonthNum, cYear);  // !! Important to assign cDate , cMonth, cYear for every switch in calendar placement
+    findWeekDates(given_Date, given_Month, given_Year);  // !! Important to assign cDate , cMonth, cYear for every switch in calendar placement for them to then be placed as parameters inside of the DisplayWeek function.
     cDaysDisplay.forEach((el, i) => el.textContent = `${dayNames[i]}. ${cWeekDates[i]}`);
 }
 
@@ -307,7 +310,6 @@ function findDate() {
     return `${foundDate}/${foundMonth}/${foundYear}`;
 }
 
-let cWeekDates = [];  // array for saving the dates of the week
 // function to find the dates for every day of the week of the given date
 function findWeekDates(given__Date, given__Month, given__Year) {
     cWeekDates = [];
