@@ -1,0 +1,196 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header img {
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.calendar {
+    display: grid;
+    grid-template-rows: 1fr 2fr 13fr;
+    height: 52rem;
+    justify-content: center;
+    text-align: center;
+    margin: 2rem;
+}
+
+.date {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+}
+
+.week-before {
+    justify-self: right;
+}
+
+.week-before, .week-after {
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+}
+
+.add-event {
+    position: absolute;
+    justify-self: center;
+    margin-top: 5rem;
+    width: 7rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    border-radius: 0.7rem;
+    cursor: pointer;
+    background-color: rgb(156, 161, 180);
+    border: 0.14rem solid rgb(2, 0, 28);
+    color: rgb(1, 5, 61);
+}
+
+.color-choice {
+    display: none;
+    background-color: whitesmoke;
+    top: 11rem;
+    position: absolute;
+    justify-self: center;
+    justify-items: center;
+    align-items: center;
+    width: 15rem;
+    height: 6rem;
+    border-radius: 1rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+}
+
+.color-choice :nth-child(3) {
+    grid-column: 1 / span 2;
+}
+
+.color-choice-input {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 1rem;
+}
+
+.color-ok {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    width: 2.5rem;
+    height: 1.5rem;
+    color: lightgrey;
+    border: 0.2rem solid green;
+    border-radius: 0.6rem;
+    color: green;
+    cursor: pointer;
+}
+
+.event-desc {
+    display: none;
+}
+
+.event-description {
+    position: absolute;
+    justify-self: center;
+    margin-top: 3.5rem;
+    grid-template-columns: 1fr 4fr 2fr 9fr;
+    gap: 0.5rem;
+}
+
+.event-description input {
+    border: 0.05rem dashed gray;
+}
+
+.event-description .group {
+    height: 1rem;
+}
+
+.event-description .desc {
+    height: 2rem;
+}
+
+.choose-time {
+    position: absolute;
+    margin-top: 6rem;
+    margin-left: 34rem;
+    grid-template-columns: repeat(4, 1fr);
+    width: 15rem;
+}
+
+.create-event {
+    justify-self: center;
+    position: absolute;
+    margin-top: 8rem;
+    width: 9rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    border-radius: 0.7rem;
+    cursor: pointer;
+    background-color: rgb(183, 216, 183);
+    border: 0.14rem solid green;
+    color: darkgreen;
+}
+
+.error-event-creation {
+    display: none;
+    position: absolute;
+    margin-top: 11rem;
+    justify-self: center;
+    color: red;
+    font-weight: 700;
+}
+
+.grid {
+    margin-top: 10rem;
+    display: grid;
+    grid-template-rows: repeat(39, 1rem);
+    grid-template-columns: 1rem repeat(7, 6rem);
+    height: 39rem;
+    z-index: 5;
+    text-align: left;
+}
+
+.hour {
+    justify-self: center;
+    grid-column: 1;
+}
+
+.day {
+    margin-left: 0.2rem;
+}
+
+.deco-grid {
+    position: relative;
+    top: -39rem;
+    width: 43rem;
+    height: 39rem;
+    z-index: 2;
+}
+
+
+/*Classes that are toggled / added to elements through js */
+.new-event {
+    width: 6rem;
+    height: 1rem;
+    font-size: 0.8rem;
+    padding: 0.1rem;
+    position: absolute;
+    z-index: 3;
+    margin: 1rem 0 0 1rem;
+    border: 0.05rem solid black;
+}

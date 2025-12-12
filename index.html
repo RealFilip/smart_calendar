@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Calendar</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header>
+        <h1>Smart Calendar</h1>
+        <img src="./images/customization.png" alt="customization button">
+    </header>
+    <hr>
+    <main class="calendar">
+        <div class="date">
+            <img class="week-before" id="week-before" src="./images/arrow-left.png" alt="arrow to week before">
+            <h2 id="week-display">Week X ; Y - Z month. year</h2>
+            <img class="week-after" id="week-after" src="./images/arrow-right.png" alt="arrow to week after">
+        </div>
+
+        <button class="add-event" id="add-event">Add Event</button>
+
+        <div class="color-choice" id="color-choice">
+            <h3>Group Color</h3>
+            <input type="color" class="color-choice-input" id="color-picker">
+            <button class="color-ok" id="color-ok-button">OK</button>
+        </div>
+
+        <div class="event-description event-desc">
+            <label for="group">Group: </label>
+            <input class="group" id="group" name="group" type="text">
+
+            <label for="desc">Description: </label>
+            <input class="desc" id="desc" name="desc" type="text">
+
+            <label for="choose-day">Day: </label>
+            <select name="choose-day" id="choose-day">
+                <option value="0">Monday</option>
+                <option value="1">Tuesday</option>
+                <option value="2">Wednesday</option>
+                <option value="3">Thursday</option>
+                <option value="4">Friday</option>
+                <option value="5">Saturday</option>
+                <option value="6">Sunday</option>
+            </select>
+        </div>
+        <div class="choose-time event-desc">
+            <label for="choose-from">From: </label>
+            <select name="choose-from" id="choose-from">
+                <option value="1">05:00</option>
+                <option value="2">05:30</option>
+                <option value="3">06:00</option>
+                <option value="4">06:30</option>
+                <option value="5">07:00</option>
+                <option value="6">07:30</option>
+                <option value="7">08:00</option>
+                <option value="8">08:30</option>
+                <option value="9">09:00</option>
+                <option value="10">09:30</option>
+                <option value="11">10:00</option>
+                <option value="12">10:30</option>
+                <option value="13">11:00</option>
+                <option value="14">11:30</option>
+                <option value="15">12:00</option>
+                <option value="16">12:30</option>
+                <option value="17">13:00</option>
+                <option value="18">13:30</option>
+                <option value="19">14:00</option>
+                <option value="20">14:30</option>
+                <option value="21">15:00</option>
+                <option value="22">15:30</option>
+                <option value="23">16:00</option>
+                <option value="24">16:30</option>
+                <option value="25">17:00</option>
+                <option value="26">17:30</option>
+                <option value="27">18:00</option>
+                <option value="28">18:30</option>
+                <option value="29">19:00</option>
+                <option value="30">19:30</option>
+                <option value="31">20:00</option>
+                <option value="32">20:30</option>
+                <option value="33">21:00</option>
+                <option value="34">21:30</option>
+                <option value="35">22:00</option>
+                <option value="36">22:30</option>
+                <option value="37">23:00</option>
+                <option value="38">23:30</option>
+                <option value="39">00:00</option>
+            </select>
+
+            <label for="choose-to">To: </label>
+            <select name="choose-to" id="choose-to">
+                <option value="2">05:30</option>
+                <option value="3">06:00</option>
+                <option value="4">06:30</option>
+                <option value="5">07:00</option>
+                <option value="6">07:30</option>
+                <option value="7">08:00</option>
+                <option value="8">08:30</option>
+                <option value="9">09:00</option>
+                <option value="10">09:30</option>
+                <option value="11">10:00</option>
+                <option value="12">10:30</option>
+                <option value="13">11:00</option>
+                <option value="14">11:30</option>
+                <option value="15">12:00</option>
+                <option value="16">12:30</option>
+                <option value="17">13:00</option>
+                <option value="18">13:30</option>
+                <option value="19">14:00</option>
+                <option value="20">14:30</option>
+                <option value="21">15:00</option>
+                <option value="22">15:30</option>
+                <option value="23">16:00</option>
+                <option value="24">16:30</option>
+                <option value="25">17:00</option>
+                <option value="26">17:30</option>
+                <option value="27">18:00</option>
+                <option value="28">18:30</option>
+                <option value="29">19:00</option>
+                <option value="30">19:30</option>
+                <option value="31">20:00</option>
+                <option value="32">20:30</option>
+                <option value="33">21:00</option>
+                <option value="34">21:30</option>
+                <option value="35">22:00</option>
+                <option value="36">22:30</option>
+                <option value="37">23:00</option>
+                <option value="38">23:30</option>
+                <option value="39">00:00</option>
+            </select>
+        </div>
+        <button class="create-event event-desc" id="create-event">Create Event</button>
+        <p class="error-event-creation" id="error-event-creation">ERROR</p>
+
+        <div class="grid">
+            <div class="empty"></div>
+            <p class="day">Mon. Y.</p>
+            <p class="day">Tue.</p>
+            <p class="day">Wed.</p>
+            <p class="day">Thu.</p>
+            <p class="day">Fri.</p>
+            <p class="day">Sat.</p>
+            <p class="day">Sun. Z.</p>
+
+            <p class="hour">5</p>
+            <p class="hour empty"></p>
+            <p class="hour">6</p>
+            <p class="hour empty"></p>
+            <p class="hour">7</p>
+            <p class="hour empty"></p>
+            <p class="hour">8</p>
+            <p class="hour empty"></p>
+            <p class="hour">9</p>
+            <p class="hour empty"></p>
+            <p class="hour">10</p>
+            <p class="hour empty"></p>
+            <p class="hour">11</p>
+            <p class="hour empty"></p>
+            <p class="hour">12</p>
+            <p class="hour empty"></p>
+            <p class="hour">13</p>
+            <p class="hour empty"></p>
+            <p class="hour">14</p>
+            <p class="hour empty"></p>
+            <p class="hour">15</p>
+            <p class="hour empty"></p>
+            <p class="hour">16</p>
+            <p class="hour empty"></p>
+            <p class="hour">17</p>
+            <p class="hour empty"></p>
+            <p class="hour">18</p>
+            <p class="hour empty"></p>
+            <p class="hour">19</p>
+            <p class="hour empty"></p>
+            <p class="hour">20</p>
+            <p class="hour empty"></p>
+            <p class="hour">21</p>
+            <p class="hour empty"></p>
+            <p class="hour">22</p>
+            <p class="hour empty"></p>
+            <p class="hour">23</p>
+        </div>
+        <img src="./images/calendar-grid.png" class="deco-grid"></img>
+    </main>
+
+    <div class="smart-functions"></div>
+
+    <script type="module" src="./script.js" defer></script>
+</body>
+</html>

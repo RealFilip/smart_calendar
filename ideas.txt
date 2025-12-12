@@ -1,0 +1,7 @@
+Website: Smart Calendar
+
+Functions: browse through weeks of your own plans and upcoming events. You can add/remove things to every day. Customize your calendar with colors of your choice. Easily find all important events by using the smart functions on the bottom of the page (by searching for your given word, ex: "optique" and calendar will find all events containing "optique").
+
+Design: each week will have the days as columns and the hours as rows. Hours will be set up accordingly to INSA school hours, to make it easier to add classes and events for the specified hours. Different events can have different colors since the user can customize the colors of a specific category / item. If you add an exam it will always be marked as red, if you add something and mark it as important (option) it will be bright orange/red.
+
+Layout: The customization symbol/button will be in the header of the page. The calendar will be in the main, right under the header. Under the main, there will be a "summary" section that justifies this being a "smart" calendar.
