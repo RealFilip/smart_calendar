@@ -63,23 +63,6 @@ descInput.addEventListener("input", () => {
 // coordinates for the new event in the calendar grid.
 let xEvent;
 let yEvent;
-let calendarData = {
-    // groups object for the different groups created by the user
-    groups: {
-        groupNames: ["sport"],
-
-        sport: {
-            color: "orange",
-            events: []
-        }
-    },
-
-    // events object to systematically create event objects that then get added into their adherent group
-    all_events: {
-        num: 0
-
-    }
-};
 
 createEventBtn.addEventListener("click", () => {
     // CODE TO CHECK IF GIVEN INFO BY USER IS VALID
@@ -117,7 +100,7 @@ createEventBtn.addEventListener("click", () => {
         errorEventCreation.textContent = errorMessage;
         errorEventCreation.style.display = 'inline-block';
     } else {
-        console.log("good");
+        console.log(calendarData);
         //calculation of event coordinates in the calendar grid
         xEvent = chooseDay.value * 6 + 1;
         yEvent = chooseFrom.value;
@@ -171,7 +154,7 @@ createEventBtn.addEventListener("click", () => {
 
                 calendarData.groups[groupInput.value] = {
                     color: color,
-                    events: [calendarData.all_events.eventName]
+                    events: [eventName]
                 }
 
             }, {once: true}); // makes sure that this event listener for the specific element gets deactivated after one use, to avoid color confusion (all elements adapting the new color chosen)
@@ -185,7 +168,7 @@ createEventBtn.addEventListener("click", () => {
                 desc: descInput.value
             }
 
-            calendarData.groups[groupInput.value].events.push(calendarData.all_events.eventName);
+            calendarData.groups[groupInput.value].events.push(eventName);
         }
 
         newEvent.textContent = descInput.value;
@@ -200,8 +183,41 @@ createEventBtn.addEventListener("click", () => {
 // calendar navigation
 
 
-// load in data
-displayWeek(cDate, cMonthNum, cYear);
+// LOAD IN DATA
+let calendarData = {};  //predefines the main data variable 
+// finds saved data or starts from scratch if none found
+if (!localStorage.getItem("sm-calendar-data")) {
+    calendarData = {
+        // groups object for the different groups created by the user
+        groups: {
+            groupNames: ["sport"],
+
+            sport: {
+                color: "orange",
+                events: []
+            }
+        },
+
+        // events object to systematically create event objects that then get added into their adherent group
+        all_events: {
+            num: 1,
+
+            basketball: {
+                    date: "13/12/2025",
+                    time: `1 --> 3`,
+                    desc: "Play basketball"
+            }
+        }
+    };
+    localStorage.setItem("sm-calendar-data", JSON.stringify(calendarData));
+} else {
+    calendarData = JSON.parse(localStorage.getItem("sm-calendar-data"));
+}
+// loads in saved data if existing
+console.log(calendarData.all_events.num);
+for (let i = 0; i < calendarData.all_events.num; i++) {} 
+
+displayWeek(cDate, cMonthNum, cYear); //gets week dates
 
 for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
     // assigns all events of the i-th group
