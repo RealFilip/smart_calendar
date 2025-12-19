@@ -247,7 +247,7 @@ function displayWeek(given_Date, given_Month, given_Year) {
         cDayInWeekNum -= 1; 
     }
 
-    let cWeek = Math.floor(((totalDays + firstDayDatabase[given_Year]) / 7));
+    let cWeek = Math.floor(((totalDays + firstDayDatabase[given_Year]) / 7) + 1);
 
     // code to calculate this weeks monday and this weeks sunday, and display the dates after
     let cWeekMondayDate;
@@ -379,6 +379,7 @@ function extractFromDate(extractionType, extDate) {
         if (extDate[i] === "/") {
             extraction = true;
         } else {
+            console.log(extDate[i]);
             extractedDate += extDate[i];
         }
         i++;

@@ -176,6 +176,8 @@ createEventBtn.addEventListener("click", () => {
         newEvent.style.marginTop = `${yEvent}rem`;
         newEvent.style.height = `${eventHeight}rem`;
         grid.appendChild(newEvent);
+
+        localStorage.setItem("sm-calendar-data", JSON.stringify(calendarData));
     }
 
 })
@@ -194,7 +196,7 @@ if (!localStorage.getItem("sm-calendar-data")) {
 
             sport: {
                 color: "orange",
-                events: []
+                events: ["basketball"]
             }
         },
 
@@ -214,19 +216,32 @@ if (!localStorage.getItem("sm-calendar-data")) {
     calendarData = JSON.parse(localStorage.getItem("sm-calendar-data"));
 }
 // loads in saved data if existing
-console.log(calendarData.all_events.num);
 for (let i = 0; i < calendarData.all_events.num; i++) {} 
 
 displayWeek(cDate, cMonthNum, cYear); //gets week dates
 
 for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
     // assigns all events of the i-th group
-    let groupEvents = calendarData.groups[calendarData.groups.groupNames[i]].events;
+    let getGroupName = calendarData.groups.groupNames[i];
+    let groupEvents = calendarData.groups[getGroupName].events;
+    let groupColor = calendarData.groups[calendarData.groups.groupNames[i]].color;
 
     // loop to go through every event in the i-th group
     for (let y = 0; y < groupEvents.length; y++) {
-        let eventDate = calendarData.all_events.groupEvents[y].date;
+        let groupEvent = groupEvents[y];
+        let eventDate = calendarData.all_events[groupEvent].date;
 
+        //extract just date, just month, just year
+        let eventDay = extractFromDate("date", eventDate);
+        let eventMonth = extractFromDate("month", eventDate);
+        let eventYear = extractFromDate("year", eventDate);
+
+        console.log(`${eventDay}, ${eventMonth}, ${eventYear}`);
+        
+        //check if the date is in the current week
+        if (sameWeek(`${eventDay}/${eventMonth}/${eventYear}`, cDate)) {
+            //if yes display the saved data to the current week
+        }
     }
 }
 
