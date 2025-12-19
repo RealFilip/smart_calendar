@@ -1,6 +1,6 @@
 
 // imports multiple functions 
-import { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate } from './functions.js';
+import { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate, findDayInWeek } from './functions.js';
 
 //EVERYTHING CALENDAR RELATED
 // get all calendar document objects
@@ -20,12 +20,6 @@ const firstDayDatabase = {
     2029: 0,
     2030: 1
 }
-
-//calculate the current week
-let totalDays = 0;
-let cMonthDays = 0;
-let previousMonth = ['', 0, 0];
-let nextMonth = ['', 0, 0];
 
 // add event to calendar
 const addEventBtn = document.getElementById("add-event");
@@ -237,10 +231,24 @@ for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
         let eventYear = extractFromDate("year", eventDate);
 
         console.log(`${eventDay}, ${eventMonth}, ${eventYear}`);
-        
+
         //check if the date is in the current week
-        if (sameWeek(`${eventDay}/${eventMonth}/${eventYear}`, cDate)) {
-            //if yes display the saved data to the current week
+        if (sameWeek(`${eventDay}/${eventMonth}/${eventYear}`, `${cDate}/${cMonthNum}/${cYear}`)) {
+            let newEvent = document.createElement('p');
+            newEvent.classList.add("new-event");
+            addEventBtn.style.display = 'block';
+            newEvent.style.backgroundColor = calendarData.groups[getGroupName].color;
+            newEvent.textContent = calendarData.all_events[groupEvent].desc;
+
+            //calculation of event coordinates in the calendar grid
+            let fTN = Number((calendarData.all_events[groupEvent].time).match(/\d+/)[0]);         // from time num
+            let tTN = Number((calendarData.all_events[groupEvent].time).match(/\d+(?!.*\d)/)[0]); // to time num
+            let deltaTN = tTN - fTN;
+
+            newEvent.style.marginLeft = `${(findDayInWeek(eventDay, eventMonth, eventYear) - 1) * 6 + 1}rem`;
+            newEvent.style.marginTop = `${fTN}rem`;
+            newEvent.style.height = `${deltaTN}rem`;
+            grid.appendChild(newEvent);
         }
     }
 }

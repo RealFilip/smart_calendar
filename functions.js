@@ -379,7 +379,6 @@ function extractFromDate(extractionType, extDate) {
         if (extDate[i] === "/") {
             extraction = true;
         } else {
-            console.log(extDate[i]);
             extractedDate += extDate[i];
         }
         i++;
@@ -408,4 +407,9 @@ function extractFromDate(extractionType, extDate) {
     }
 }
 
-export { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate };
+function findDayInWeek(givenDate, givenMonth, givenYear) {
+    calData(givenDate, givenMonth, givenYear);
+    return ((totalDays + firstDayDatabase[givenYear]) % 7);
+}
+
+export { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate, findDayInWeek };
