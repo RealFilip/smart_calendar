@@ -407,9 +407,38 @@ function extractFromDate(extractionType, extDate) {
     }
 }
 
+// finds the day in the week of a date and returns as an int: 0-6
 function findDayInWeek(givenDate, givenMonth, givenYear) {
     calData(givenDate, givenMonth, givenYear);
-    return ((totalDays + firstDayDatabase[givenYear]) % 7);
+    return ((totalDays + firstDayDatabase[givenYear]) % 7 - 1);
 }
 
-export { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate, findDayInWeek };
+// checks if event overlaps a currently existing one and returns boolean. Takes a time: 'from --> to' ,a date: 'Day/Month/Year', and the object containing saved data
+function eventOverlap( givenTime, givenFullDate, givenData ) {
+    console.log(givenData);
+    let overlap = false;
+    for (let i = 0; i < givenData.eventNum; i++) {
+        let eventNName = `event${i + 1}`;  // event num name
+
+        console.log(Object.keys(givenData.all_events));
+        console.log(givenData.all_events[eventNName]);
+        // checks if the dates are equal
+        if (givenData.all_events[eventNName].date === givenFullDate) {
+            // gets start- and end-time for the given date
+            let start1 =  Number(givenTime.match(/\d+/)[0]);
+            let end1 = Number(givenTime.match(/\d+(?!.*\d)/)[0]);
+
+            // gets start- and end-time for the data
+            let start2 = Number((givenData.all_events[eventNName].time).match(/\d+/)[0]);
+            let end2 = Number((givenData.all_events[eventNName].time).match(/\d+(?!.*\d)/)[0]);
+
+            if ((start1 <= start2 && end1 > start2) || (start1 >= start2 && start1 < end2)) {
+                overlap = true;
+            }
+        }
+    }
+
+    return overlap;
+}
+
+export { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate, findDayInWeek, eventOverlap };

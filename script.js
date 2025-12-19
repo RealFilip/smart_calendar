@@ -1,6 +1,6 @@
 
 // imports multiple functions 
-import { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate, findDayInWeek } from './functions.js';
+import { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate, findDayInWeek, eventOverlap } from './functions.js';
 
 //EVERYTHING CALENDAR RELATED
 // get all calendar document objects
@@ -69,11 +69,14 @@ createEventBtn.addEventListener("click", () => {
     //checks if the chosen time period is legitimate
     if (parseInt(chooseFrom.value) >= parseInt(chooseTo.value)) {
         error = true;
-        errorMessage += "time space chosen not valid, "
+        errorMessage += "time space chosen not valid"
     }
 
     //checks if a group has been assigned / chosen
     if (!groupInput.value) {
+        if (error === true) {
+            errorMessage += ", ";
+        }
         error = true;
         errorMessage += "missing group"
         missingCounter += 1;
@@ -81,12 +84,25 @@ createEventBtn.addEventListener("click", () => {
 
     //checks if the description is added
     if (!descInput.value) {
-        error = true;
         if (missingCounter === 1) {
-            errorMessage += " and description";
+            errorMessage += "and description";
+            error = true;
         } else {
+            if (error === true) {
+                errorMessage += ", ";
+            }
+            error = true;
             errorMessage += "missing description";
         }
+    }
+
+    // checks if the new event overlaps an already existing event in the database
+    if (eventOverlap(`${chooseFrom.value} --> ${chooseTo.value}`, findDate(), calendarData)) {
+        if (error === true) {
+            errorMessage += ", ";
+        }
+        error = true;
+        errorMessage += "chosen space of time collides with an existing event";
     }
 
     //error message gets sent if errors have been found
@@ -94,7 +110,6 @@ createEventBtn.addEventListener("click", () => {
         errorEventCreation.textContent = errorMessage;
         errorEventCreation.style.display = 'inline-block';
     } else {
-        console.log(calendarData);
         //calculation of event coordinates in the calendar grid
         xEvent = chooseDay.value * 6 + 1;
         yEvent = chooseFrom.value;
@@ -121,8 +136,8 @@ createEventBtn.addEventListener("click", () => {
         newEvent.classList.add("new-event");
 
         // updates amount of events, and creates the event name (eventx, for x amount of total events)
-        calendarData.all_events.num += 1;
-        const eventName = `event${calendarData.all_events.num}`;
+        calendarData.eventNum += 1;
+        const eventName = `event${calendarData.eventNum}`;
 
         // if the group assigned is new, the user gets to choose its color
         if (groupIsNew) {
@@ -184,21 +199,22 @@ let calendarData = {};  //predefines the main data variable
 // finds saved data or starts from scratch if none found
 if (!localStorage.getItem("sm-calendar-data")) {
     calendarData = {
+        // totalt amount of events
+        eventNum: 1,
+        
         // groups object for the different groups created by the user
         groups: {
             groupNames: ["sport"],
 
             sport: {
                 color: "orange",
-                events: ["basketball"]
+                events: ["event1"]
             }
         },
 
         // events object to systematically create event objects that then get added into their adherent group
         all_events: {
-            num: 1,
-
-            basketball: {
+            event1: {
                     date: "13/12/2025",
                     time: `1 --> 3`,
                     desc: "Play basketball"
@@ -210,15 +226,15 @@ if (!localStorage.getItem("sm-calendar-data")) {
     calendarData = JSON.parse(localStorage.getItem("sm-calendar-data"));
 }
 // loads in saved data if existing
-for (let i = 0; i < calendarData.all_events.num; i++) {} 
+for (let i = 0; i < calendarData.eventNum; i++) {} 
 
 displayWeek(cDate, cMonthNum, cYear); //gets week dates
 
+// loops through each saved group and checks if any saved events are in the current week
 for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
     // assigns all events of the i-th group
     let getGroupName = calendarData.groups.groupNames[i];
     let groupEvents = calendarData.groups[getGroupName].events;
-    let groupColor = calendarData.groups[calendarData.groups.groupNames[i]].color;
 
     // loop to go through every event in the i-th group
     for (let y = 0; y < groupEvents.length; y++) {
@@ -245,7 +261,7 @@ for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
             let tTN = Number((calendarData.all_events[groupEvent].time).match(/\d+(?!.*\d)/)[0]); // to time num
             let deltaTN = tTN - fTN;
 
-            newEvent.style.marginLeft = `${(findDayInWeek(eventDay, eventMonth, eventYear) - 1) * 6 + 1}rem`;
+            newEvent.style.marginLeft = `${findDayInWeek(eventDay, eventMonth, eventYear) * 6 + 1}rem`;
             newEvent.style.marginTop = `${fTN}rem`;
             newEvent.style.height = `${deltaTN}rem`;
             grid.appendChild(newEvent);
