@@ -246,8 +246,6 @@ for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
         let eventMonth = extractFromDate("month", eventDate);
         let eventYear = extractFromDate("year", eventDate);
 
-        console.log(`${eventDay}, ${eventMonth}, ${eventYear}`);
-
         //check if the date is in the current week
         if (sameWeek(`${eventDay}/${eventMonth}/${eventYear}`, `${cDate}/${cMonthNum}/${cYear}`)) {
             let newEvent = document.createElement('p');
@@ -261,6 +259,7 @@ for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
             let tTN = Number((calendarData.all_events[groupEvent].time).match(/\d+(?!.*\d)/)[0]); // to time num
             let deltaTN = tTN - fTN;
 
+            console.log(findDayInWeek(eventDay, eventMonth, eventYear));
             newEvent.style.marginLeft = `${findDayInWeek(eventDay, eventMonth, eventYear) * 6 + 1}rem`;
             newEvent.style.marginTop = `${fTN}rem`;
             newEvent.style.height = `${deltaTN}rem`;

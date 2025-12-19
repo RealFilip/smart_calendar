@@ -410,18 +410,20 @@ function extractFromDate(extractionType, extDate) {
 // finds the day in the week of a date and returns as an int: 0-6
 function findDayInWeek(givenDate, givenMonth, givenYear) {
     calData(givenDate, givenMonth, givenYear);
-    return ((totalDays + firstDayDatabase[givenYear]) % 7 - 1);
+    console.log(`${givenDate}, ${givenMonth}, ${givenYear}`);
+    // if it's a sunday the % will give 0, so adjusted through this if
+    if (((totalDays + firstDayDatabase[givenYear]) % 7) === 0) {
+        return 6;
+    } else {
+        return ((totalDays + firstDayDatabase[givenYear]) % 7 - 1);
+    }
 }
 
 // checks if event overlaps a currently existing one and returns boolean. Takes a time: 'from --> to' ,a date: 'Day/Month/Year', and the object containing saved data
 function eventOverlap( givenTime, givenFullDate, givenData ) {
-    console.log(givenData);
     let overlap = false;
     for (let i = 0; i < givenData.eventNum; i++) {
         let eventNName = `event${i + 1}`;  // event num name
-
-        console.log(Object.keys(givenData.all_events));
-        console.log(givenData.all_events[eventNName]);
         // checks if the dates are equal
         if (givenData.all_events[eventNName].date === givenFullDate) {
             // gets start- and end-time for the given date
