@@ -1,6 +1,6 @@
 
 // imports multiple functions 
-import { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate, findDayInWeek, eventOverlap } from './functions.js';
+import { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, findWeek, sameWeek, extractFromDate, findDayInWeek, eventOverlap } from './functions.js';
 
 //EVERYTHING CALENDAR RELATED
 // get all calendar document objects
@@ -18,8 +18,31 @@ const firstDayDatabase = {
     2027: 4,
     2028: 5,
     2029: 0,
-    2030: 1
+    2030: 1,
+    2031: 2,
+    2032: 3,
+    2033: 5,
+    2034: 6,
+    2035: 0,
+    2036: 2,
+    2037: 3,
+    2038: 4,
+    2039: 5,
+    2040: 0,
+    2041: 1,
+    2042: 2,
+    2043: 3,
+    2044: 5,
+    2045: 6,
+    2046: 0,
+    2047: 1,
+    2048: 3,
+    2049: 4,
+    2050: 5,
 }
+
+// finds the current week number (needed for arrows to jump between weeks)
+let cWeek = findWeek(cDate, cMonthNum, cYear);
 
 // add event to calendar
 const addEventBtn = document.getElementById("add-event");
@@ -35,6 +58,10 @@ const grid = document.querySelector('.grid');
 const colorChoice = document.getElementById("color-choice");
 const colorPicker = document.getElementById("color-picker");
 const colorOkButton = document.getElementById("color-ok-button");
+
+// arrows
+const previousWeek = document.getElementById("week-before");
+const nextWeek = document.getElementById("week-after");
 
 addEventBtn.addEventListener("click", () => {
     addEventBtn.style.display = 'none';
@@ -58,6 +85,7 @@ descInput.addEventListener("input", () => {
 let xEvent;
 let yEvent;
 
+//creating a new event to the current week
 createEventBtn.addEventListener("click", () => {
     // CODE TO CHECK IF GIVEN INFO BY USER IS VALID
     
@@ -193,6 +221,10 @@ createEventBtn.addEventListener("click", () => {
 
 // calendar navigation
 
+//arrow left (previous week)
+previousWeek.addEventListener("click", () => {
+
+})
 
 // LOAD IN DATA
 let calendarData = {};  //predefines the main data variable 

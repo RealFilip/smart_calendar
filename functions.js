@@ -20,6 +20,7 @@ const cdi = new Date();  // cdi = current date information
 const cYear = cdi.getFullYear();
 const cMonthNum = cdi.getMonth() + 1;
 const cDate = cdi.getDate();
+// used to find the proper week-day of the first day of the year (since every year doesn't start on a monday)
 const firstDayDatabase = {
     2025: 2,
     2026: 3,
@@ -93,6 +94,268 @@ let nextMonth = ['', 0, 0];
 
 // useful funciton calculate totalDays, previousMonth (name and days) and nextMonth (name and days)
 function calData(givenDate, givenMonth, givenYear) {
+    totalDays = 0;
+    cMonthDays = 0;
+    previousMonth = ['', 0, 0];
+    nextMonth = ['', 0, 0];
+    let leapYear = checkLeapYear(givenYear);
+
+    for (let i = 1; i <= givenMonth; i++) { //goes through (i + 1) amount of months and adds up total amount of days
+        if (i === 1) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['December', 31, 12];
+            if (leapYear) {
+                nextMonth = ['February', 29, 2];
+            } else {
+                nextMonth = ['February', 28, 2];
+            }
+        } else if (i === 2) {
+            nextMonth = ['March', 31, 3];
+            previousMonth = ['January', 31, 1];
+            // checks if it's a leap year
+            if (leapYear) {
+                if (i < givenMonth) {
+                    totalDays += 29;
+                } else {
+                    totalDays += givenDate;
+                }
+                cMonthDays = 29;
+            } else {
+                if (i < givenMonth) {
+                    totalDays += 28;
+                } else {
+                    totalDays += givenDate;
+                }
+                cMonthDays = 28;
+            }
+        } else if (i === 3) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            nextMonth = ['April', 30, 4];
+            // checks if it's a leap year
+            if (leapYear) {
+                previousMonth = ['February', 29, 2];
+            } else {
+                previousMonth = ['February', 28, 2];
+            }
+        } else if (i === 4) {
+            if (i < givenMonth) {
+                totalDays += 30;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 30;
+            previousMonth = ['March', 31, 3];
+            nextMonth = ['May', 31, 5];
+        } else if (i === 5) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['April', 30, 4];
+            nextMonth = ['June', 30, 6];
+        } else if (i === 6) {
+            if (i < givenMonth) {
+                totalDays += 30;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 30;
+            previousMonth = ['May', 31, 5];
+            nextMonth = ['July', 31, 7];
+        } else if (i === 7) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['June', 30, 6];
+            nextMonth = ['August', 31, 8]
+        } else if (i === 8) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['July', 31, 7];
+            nextMonth = ['September', 30, 9];
+        } else if (i === 9) {
+            if (i < givenMonth) {
+                totalDays += 30;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 30;
+            previousMonth = ['August', 31, 8];
+            nextMonth = ['October', 31, 10];
+        } else if (i === 10) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['September', 30, 9];
+            nextMonth = ['November', 30, 11];
+        } else if (i === 11) {
+            if (i < givenMonth) {
+                totalDays += 30;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 30;
+            previousMonth = ['October', 31, 10];
+            nextMonth = ['December', 31, 12];
+        } else if (i === 12) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            previousMonth = ['November', 30, 11];
+            nextMonth = ['January', 31, 1];
+            cMonthDays = 31;
+        }
+    }
+}
+
+// function finds the week of the given date info and displays it in the week title on the webpage and also returns the entire week dates in an array
+function displayWeek(given_Date, given_Month, given_Year) {
+    // CODE THAT DISPLAYS THE WEEK TITLE
+    // gets multiple needed values; cMonthDays, previousMonth, nextMonth, totalDays 
+    calData(given_Date, given_Month, given_Year);
+    let givenMonthName = getMonthName(given_Month);
+
+    // calculates current day of the week as a number, 0 is monday, 6 is sunday
+    let cDayInWeekNum = (totalDays + firstDayDatabase[given_Year]) % 7;
+    if (cDayInWeekNum === 0) { // it's a sunday
+        cDayInWeekNum = 6;
+    } else { 
+        cDayInWeekNum -= 1; 
+    }
+
+    let cWeek = Math.floor(((totalDays + firstDayDatabase[given_Year]) / 7) + 1);
+
+    // code to calculate this weeks monday and this weeks sunday, and display the dates after
+    let cWeekMondayDate;
+    let cWeekSundayDate;
+
+    //calculate monday and sunday dates, and display them in the week title
+    if (given_Date >= cDayInWeekNum && (given_Date + 6 - cDayInWeekNum) <= cMonthDays) {
+        cWeekMondayDate = given_Date - cDayInWeekNum;
+        cWeekSundayDate = cWeekMondayDate + 6;
+        weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate} - ${cWeekSundayDate} ${givenMonthName}, ${given_Year}`;
+    } else if (given_Date <= cDayInWeekNum) {
+        cWeekMondayDate = previousMonth[1] + given_Date - cDayInWeekNum;
+        cWeekSundayDate = given_Date + 6 - cDayInWeekNum;
+        weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate} ${previousMonth[0]}- ${cWeekSundayDate} ${givenMonthName}, ${given_Year}`;
+    } else if (cMonthDays > (given_Date + 6 - cDayInWeekNum)) {
+        cWeekMondayDate = given_Date - cDayInWeekNum;
+        cWeekSundayDate = 6 - cMonthDays + cWeekMondayDate;
+        weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate} - ${cWeekSundayDate} ${givenMonthName}, ${given_Year}`;
+    }
+
+    // CODE THAT DISPLAYS THE SEPARATE WEEK DATES
+    let dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    findWeekDates(given_Date, given_Month, given_Year);  // !! Important to assign cDate , cMonth, cYear for every switch in calendar placement for them to then be placed as parameters inside of the DisplayWeek function.
+    cDaysDisplay.forEach((el, i) => el.textContent = `${dayNames[i]}. ${cWeekDates[i]}`);
+}
+
+//creation of info data about the event (to then save in the calendar database)
+function findDate() {
+    // calculates current day of the week as a number, 0 is monday, 6 is sunday
+    let cDayInWeekNum = (totalDays + firstDayDatabase[cYear]) % 7;
+    if (cDayInWeekNum === 0) { // it's a sunday
+        cDayInWeekNum = 6;
+    } else { 
+        cDayInWeekNum -= 1; 
+    }
+
+    let diff = chooseDay.value - cDayInWeekNum;  //chooseDay is the input on the site (from main: script.js)
+    let foundDate;
+    let foundMonth;
+    let foundYear = cYear;
+    if (cDate + diff <= 0) {
+        foundDate = previousMonth[1] + cDate + diff;
+        foundMonth = previousMonth[2];
+        // checks if the previous month was december
+        if (previousMonth[2] === 12) {
+            foundYear -= 1;
+        }
+    } else if (cDate + diff > cMonthDays) {
+        foundDate = (cDate + diff) - cMonthDays;
+        foundMonth = nextMonth[2];
+        // checks if the next month is january
+        if (nextMonth[2] === 1) {
+            foundYear += 1;
+        }
+    } else {
+        foundDate = cDate + diff;
+        foundMonth = cMonthNum;
+    }
+
+    return `${foundDate}/${foundMonth}/${foundYear}`;
+}
+
+// function to find the dates for every day of the week of the given date
+function findWeekDates(given__Date, given__Month, given__Year) {
+    cWeekDates = [];
+    // gets multiple needed values; cMonthDays, previousMonth, nextMonth, totalDays 
+    calData(given__Date, given__Month, given__Year);
+
+    // calculates current day of the week as a number, 0 is monday, 6 is sunday
+    let cDayInWeekNum = (totalDays + firstDayDatabase[given__Year]) % 7;
+    if (cDayInWeekNum === 0) { // it's a sunday
+        cDayInWeekNum = 6;
+    } else { 
+        cDayInWeekNum -= 1; 
+    }
+
+    // code to calculate this weeks monday and this weeks sunday, and display the dates after
+    let cWeekMondayDate;
+
+    //calculate monday and sunday dates, and display them in the week title
+    if (given__Date > cDayInWeekNum && (given__Date + 6 - cDayInWeekNum) <= cMonthDays) {
+        // runs if the given__Date's week start and end are within the current month
+        cWeekMondayDate = given__Date - cDayInWeekNum;
+    } else if (given__Date <= cDayInWeekNum) {
+        // runs if the start of the given__Date's week is in the previous month
+        cWeekMondayDate = previousMonth[1] + given__Date - cDayInWeekNum;
+        cMonthDays = previousMonth[1];
+    } else if (cMonthDays < (given__Date + 6 - cDayInWeekNum)) {
+        // runs if the given__Date's week is within the next month
+        cWeekMondayDate = given__Date - cDayInWeekNum;
+    }
+
+    cWeekDates.push(cWeekMondayDate);
+    let offsetNM = 0;  // offset value needed if a date or multiple dates of the week are in the next month
+    for (let i = 1; i < 7; i++) {
+        if (cWeekMondayDate + i <= cMonthDays) {
+            cWeekDates.push(cWeekMondayDate + i);
+        } else {
+            offsetNM += 1;
+            cWeekDates.push(offsetNM);
+        }
+    }
+
+    return (cWeekDates);
+}
+
+// function to find the week number of a given date
+function findWeek(givenDate, givenMonth, givenYear) {
     totalDays = 0;
     cMonthDays = 0;
     previousMonth = ['', 0, 0];
@@ -230,127 +493,18 @@ function calData(givenDate, givenMonth, givenYear) {
             cMonthDays = 31;
         }
     }
+
+    return Math.floor(((totalDays + firstDayDatabase[givenYear]) / 7) + 1);
 }
 
-// function finds the week of the given date info and displays it in the week title on the webpage and also returns the entire week dates in an array
-function displayWeek(given_Date, given_Month, given_Year) {
-    // CODE THAT DISPLAYS THE WEEK TITLE
-    // gets multiple needed values; cMonthDays, previousMonth, nextMonth, totalDays 
-    calData(given_Date, given_Month, given_Year);
-    let givenMonthName = getMonthName(given_Month);
-
-    // calculates current day of the week as a number, 0 is monday, 6 is sunday
-    let cDayInWeekNum = (totalDays + firstDayDatabase[given_Year]) % 7;
-    if (cDayInWeekNum === 0) { // it's a sunday
-        cDayInWeekNum = 6;
-    } else { 
-        cDayInWeekNum -= 1; 
-    }
-
-    let cWeek = Math.floor(((totalDays + firstDayDatabase[given_Year]) / 7) + 1);
-
-    // code to calculate this weeks monday and this weeks sunday, and display the dates after
-    let cWeekMondayDate;
-    let cWeekSundayDate;
-
-    //calculate monday and sunday dates, and display them in the week title
-    if (given_Date >= cDayInWeekNum && (given_Date + 6 - cDayInWeekNum) <= cMonthDays) {
-        cWeekMondayDate = given_Date - cDayInWeekNum;
-        cWeekSundayDate = cWeekMondayDate + 6;
-        weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate} - ${cWeekSundayDate} ${givenMonthName}, ${given_Year}`;
-    } else if (given_Date <= cDayInWeekNum) {
-        cWeekMondayDate = previousMonth[1] + given_Date - cDayInWeekNum;
-        cWeekSundayDate = given_Date + 6 - cDayInWeekNum;
-        weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate} ${previousMonth[0]}- ${cWeekSundayDate} ${givenMonthName}, ${given_Year}`;
-    } else if (cMonthDays > (given_Date + 6 - cDayInWeekNum)) {
-        cWeekMondayDate = given_Date - cDayInWeekNum;
-        cWeekSundayDate = 6 - cMonthDays + cWeekMondayDate;
-        weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate} - ${cWeekSundayDate} ${givenMonthName}, ${given_Year}`;
-    }
-
-    // CODE THAT DISPLAYS THE SEPARATE WEEK DATES
-    let dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    findWeekDates(given_Date, given_Month, given_Year);  // !! Important to assign cDate , cMonth, cYear for every switch in calendar placement for them to then be placed as parameters inside of the DisplayWeek function.
-    cDaysDisplay.forEach((el, i) => el.textContent = `${dayNames[i]}. ${cWeekDates[i]}`);
+// used for finding the date of a given week
+function findRanWeekDay(givenWeek, givenYear) {
+    totalDays = 0;
+    totalDays = firstDayDatabase[givenYear] + 7*givenWeek;
+    
 }
 
-//creation of info data about the event (to then save in the calendar database)
-function findDate() {
-    // calculates current day of the week as a number, 0 is monday, 6 is sunday
-    let cDayInWeekNum = (totalDays + firstDayDatabase[cYear]) % 7;
-    if (cDayInWeekNum === 0) { // it's a sunday
-        cDayInWeekNum = 6;
-    } else { 
-        cDayInWeekNum -= 1; 
-    }
-
-    let diff = chooseDay.value - cDayInWeekNum;  //chooseDay is the input on the site (from main: script.js)
-    let foundDate;
-    let foundMonth;
-    let foundYear = cYear;
-    if (cDate + diff <= 0) {
-        foundDate = previousMonth[1] + cDate + diff;
-        foundMonth = previousMonth[2];
-        // checks if the previous month was december
-        if (previousMonth[2] === 12) {
-            foundYear -= 1;
-        }
-    } else if (cDate + diff > cMonthDays) {
-        foundDate = (cDate + diff) - cMonthDays;
-        foundMonth = nextMonth[2];
-        // checks if the next month is january
-        if (nextMonth[2] === 1) {
-            foundYear += 1;
-        }
-    } else {
-        foundDate = cDate + diff;
-        foundMonth = cMonthNum;
-    }
-
-    return `${foundDate}/${foundMonth}/${foundYear}`;
-}
-
-// function to find the dates for every day of the week of the given date
-function findWeekDates(given__Date, given__Month, given__Year) {
-    cWeekDates = [];
-    // gets multiple needed values; cMonthDays, previousMonth, nextMonth, totalDays 
-    calData(given__Date, given__Month, given__Year);
-
-    // calculates current day of the week as a number, 0 is monday, 6 is sunday
-    let cDayInWeekNum = (totalDays + firstDayDatabase[given__Year]) % 7;
-    if (cDayInWeekNum === 0) { // it's a sunday
-        cDayInWeekNum = 6;
-    } else { 
-        cDayInWeekNum -= 1; 
-    }
-
-    // code to calculate this weeks monday and this weeks sunday, and display the dates after
-    let cWeekMondayDate;
-
-    //calculate monday and sunday dates, and display them in the week title
-    if (given__Date >= cDayInWeekNum && (given__Date + 6 - cDayInWeekNum) <= cMonthDays) {
-        cWeekMondayDate = given__Date - cDayInWeekNum;
-    } else if (given__Date <= cDayInWeekNum) {
-        cWeekMondayDate = previousMonth[1] + given__Date - cDayInWeekNum;
-    } else if (cMonthDays > (given__Date + 6 - cDayInWeekNum)) {
-        cWeekMondayDate = given__Date - cDayInWeekNum;
-    }
-
-    cWeekDates.push(cWeekMondayDate);
-    let offsetNM = 0;  // offset value needed if a date or multiple dates of the week are in the next month
-    for (let i = 1; i < 7; i++) {
-        if (cWeekMondayDate + i <= cMonthDays) {
-            cWeekDates.push(cWeekMondayDate + i);
-        } else {
-            offsetNM += 1;
-            cWeekDates.push(offsetNM);
-        }
-    }
-
-    return (cWeekDates);
-}
-
-//function to check if two dates are in the same week
+// function to check if two dates are in the same week
 function sameWeek(date1, date2) {
     // gets the week (s) of the first and second date through two functions: extractFromDate to convert the '23/10/2006' to each separate integer needed, then displayWeek to get the weekdate arrays
     let compWeek1 = findWeekDates(extractFromDate("date", date1), extractFromDate("month", date1), extractFromDate("year", date1));
@@ -410,7 +564,6 @@ function extractFromDate(extractionType, extDate) {
 // finds the day in the week of a date and returns as an int: 0-6
 function findDayInWeek(givenDate, givenMonth, givenYear) {
     calData(givenDate, givenMonth, givenYear);
-    console.log(`${givenDate}, ${givenMonth}, ${givenYear}`);
     // if it's a sunday the % will give 0, so adjusted through this if
     if (((totalDays + firstDayDatabase[givenYear]) % 7) === 0) {
         return 6;
@@ -443,4 +596,4 @@ function eventOverlap( givenTime, givenFullDate, givenData ) {
     return overlap;
 }
 
-export { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, sameWeek, extractFromDate, findDayInWeek, eventOverlap };
+export { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, findWeek, findRanWeekDay, sameWeek, extractFromDate, findDayInWeek, eventOverlap };
