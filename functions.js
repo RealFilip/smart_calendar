@@ -362,10 +362,9 @@ function findWeek(givenDate, givenMonth, givenYear) {
     nextMonth = ['', 0, 0];
     let leapYear = checkLeapYear(givenYear);
 
-    let givenMonthAdapt = givenMonth - 1;
-    for (let i = 0; i <= givenMonthAdapt; i++) { //goes through (i + 1) amount of months and adds up total amount of days
-        if (i === 0) {
-            if (i < givenMonthAdapt) {
+    for (let i = 1; i <= givenMonth; i++) { //goes through (i + 1) amount of months and adds up total amount of days
+        if (i === 1) {
+            if (i < givenMonth) {
                 totalDays += 31;
             } else {
                 totalDays += givenDate;
@@ -377,27 +376,27 @@ function findWeek(givenDate, givenMonth, givenYear) {
             } else {
                 nextMonth = ['February', 28, 2];
             }
-        } else if (i === 1) {
+        } else if (i === 2) {
             nextMonth = ['March', 31, 3];
             previousMonth = ['January', 31, 1];
             // checks if it's a leap year
             if (leapYear) {
-                if (i < givenMonthAdapt) {
+                if (i < givenMonth) {
                     totalDays += 29;
                 } else {
                     totalDays += givenDate;
                 }
                 cMonthDays = 29;
             } else {
-                if (i < givenMonthAdapt) {
+                if (i < givenMonth) {
                     totalDays += 28;
                 } else {
                     totalDays += givenDate;
                 }
                 cMonthDays = 28;
             }
-        } else if (i === 2) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 3) {
+            if (i < givenMonth) {
                 totalDays += 31;
             } else {
                 totalDays += givenDate;
@@ -410,8 +409,8 @@ function findWeek(givenDate, givenMonth, givenYear) {
             } else {
                 previousMonth = ['February', 28, 2];
             }
-        } else if (i === 3) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 4) {
+            if (i < givenMonth) {
                 totalDays += 30;
             } else {
                 totalDays += givenDate;
@@ -419,8 +418,8 @@ function findWeek(givenDate, givenMonth, givenYear) {
             cMonthDays = 30;
             previousMonth = ['March', 31, 3];
             nextMonth = ['May', 31, 5];
-        } else if (i === 4) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 5) {
+            if (i < givenMonth) {
                 totalDays += 31;
             } else {
                 totalDays += givenDate;
@@ -428,8 +427,8 @@ function findWeek(givenDate, givenMonth, givenYear) {
             cMonthDays = 31;
             previousMonth = ['April', 30, 4];
             nextMonth = ['June', 30, 6];
-        } else if (i === 5) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 6) {
+            if (i < givenMonth) {
                 totalDays += 30;
             } else {
                 totalDays += givenDate;
@@ -437,8 +436,8 @@ function findWeek(givenDate, givenMonth, givenYear) {
             cMonthDays = 30;
             previousMonth = ['May', 31, 5];
             nextMonth = ['July', 31, 7];
-        } else if (i === 6) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 7) {
+            if (i < givenMonth) {
                 totalDays += 31;
             } else {
                 totalDays += givenDate;
@@ -446,8 +445,8 @@ function findWeek(givenDate, givenMonth, givenYear) {
             cMonthDays = 31;
             previousMonth = ['June', 30, 6];
             nextMonth = ['August', 31, 8]
-        } else if (i === 7) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 8) {
+            if (i < givenMonth) {
                 totalDays += 31;
             } else {
                 totalDays += givenDate;
@@ -455,8 +454,8 @@ function findWeek(givenDate, givenMonth, givenYear) {
             cMonthDays = 31;
             previousMonth = ['July', 31, 7];
             nextMonth = ['September', 30, 9];
-        } else if (i === 8) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 9) {
+            if (i < givenMonth) {
                 totalDays += 30;
             } else {
                 totalDays += givenDate;
@@ -464,8 +463,8 @@ function findWeek(givenDate, givenMonth, givenYear) {
             cMonthDays = 30;
             previousMonth = ['August', 31, 8];
             nextMonth = ['October', 31, 10];
-        } else if (i === 9) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 10) {
+            if (i < givenMonth) {
                 totalDays += 31;
             } else {
                 totalDays += givenDate;
@@ -473,8 +472,8 @@ function findWeek(givenDate, givenMonth, givenYear) {
             cMonthDays = 31;
             previousMonth = ['September', 30, 9];
             nextMonth = ['November', 30, 11];
-        } else if (i === 10) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 11) {
+            if (i < givenMonth) {
                 totalDays += 30;
             } else {
                 totalDays += givenDate;
@@ -482,8 +481,8 @@ function findWeek(givenDate, givenMonth, givenYear) {
             cMonthDays = 30;
             previousMonth = ['October', 31, 10];
             nextMonth = ['December', 31, 12];
-        } else if (i === 11) {
-            if (i < givenMonthAdapt) {
+        } else if (i === 12) {
+            if (i < givenMonth) {
                 totalDays += 31;
             } else {
                 totalDays += givenDate;
