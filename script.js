@@ -224,7 +224,7 @@ createEventBtn.addEventListener("click", () => {
 //arrow left (previous week)
 previousWeek.addEventListener("click", () => {
     // array with the data of the previous month [monthName, monthDays, monthNum]
-    const prevMonth = monthData(cDate/cMonthNum/cYear)[0];
+    const prevMonth = monthData(cDate, cMonthNum, cYear)[0];
 
     // adjusts the cDate/cMonthNum/cYear accordingly
     if ((cDate - 7) > 0 ) {
