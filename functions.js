@@ -395,19 +395,23 @@ function displayWeek(given_Date, given_Month, given_Year) {
     let cWeekMondayDate;
     let cWeekSundayDate;
 
-    //calculate monday and sunday dates, and display them in the week title
-    if (given_Date >= cDayInWeekNum && (given_Date + 6 - cDayInWeekNum) <= cMonthDays) {
+    // calculate monday and sunday dates, and display them in the week title
+    // NB: cDayInWeekNum goes from 0-6!!
+    // checks if the entire week is within this month only
+    if (given_Date > cDayInWeekNum && (given_Date + 6 - cDayInWeekNum) <= cMonthDays) {
         cWeekMondayDate = given_Date - cDayInWeekNum;
         cWeekSundayDate = cWeekMondayDate + 6;
         weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate} - ${cWeekSundayDate} ${givenMonthName}, ${given_Year}`;
+    // checks if the week starts in the previous month 
     } else if (given_Date <= cDayInWeekNum) {
         cWeekMondayDate = previousMonth[1] + given_Date - cDayInWeekNum;
         cWeekSundayDate = given_Date + 6 - cDayInWeekNum;
         weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate} ${previousMonth[0]}- ${cWeekSundayDate} ${givenMonthName}, ${given_Year}`;
-    } else if (cMonthDays > (given_Date + 6 - cDayInWeekNum)) {
+    // checks if the week ends in the next month
+    } else if (cMonthDays < (given_Date + 6 - cDayInWeekNum)) {
         cWeekMondayDate = given_Date - cDayInWeekNum;
-        cWeekSundayDate = 6 - cMonthDays + cWeekMondayDate;
-        weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate} - ${cWeekSundayDate} ${givenMonthName}, ${given_Year}`;
+        cWeekSundayDate = cWeekMondayDate - cMonthDays + 6;
+        weekDisplay.textContent = `Week ${cWeek}, ${cWeekMondayDate}. ${givenMonthName} - ${cWeekSundayDate}. ${nextMonth[0]}, ${given_Year}`;
     }
 
     // CODE THAT DISPLAYS THE SEPARATE WEEK DATES
