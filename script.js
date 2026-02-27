@@ -1,6 +1,6 @@
 
 // imports multiple functions 
-import { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, findWeek, sameWeek, extractFromDate, findDayInWeek, eventOverlap } from './functions.js';
+import { checkLeapYear, getMonthName, calData, monthData, displayWeek, findDate, findWeekDates, findWeek, sameWeek, extractFromDate, findDayInWeek, eventOverlap } from './functions.js';
 
 //EVERYTHING CALENDAR RELATED
 // get all calendar document objects
@@ -9,9 +9,9 @@ const dayDisplay = document.querySelectorAll(".day");
 
 // create calendar variables
 const cdi = new Date();  // cdi = current date information
-const cYear = cdi.getFullYear();
-const cMonthNum = cdi.getMonth() + 1;
-const cDate = cdi.getDate();
+let cYear = cdi.getFullYear();
+let cMonthNum = cdi.getMonth() + 1;
+let cDate = cdi.getDate();
 const firstDayDatabase = {
     2025: 2,
     2026: 3,
@@ -223,7 +223,25 @@ createEventBtn.addEventListener("click", () => {
 
 //arrow left (previous week)
 previousWeek.addEventListener("click", () => {
+    // array with the data of the previous month [monthName, monthDays, monthNum]
+    const prevMonth = monthData(cDate/cMonthNum/cYear)[0];
 
+    // adjusts the cDate/cMonthNum/cYear accordingly
+    if ((cDate - 7) > 0 ) {
+        cDate -= 7;
+    } else if (cDate - 7 <= 0) {
+        // checks if the previous month was december and adjusts the year if it's the case
+        if (prevMonth[2] === 12) {
+            cYear -= 1;
+        }
+        // adjusts the month
+        cMonthNum = prevMonth[2];
+        
+        // adjusts the date to the previousmonth days number + current date - a week
+        cDate = prevMonth[1] + cDate - 7;
+    }
+
+    displayWeek(cDate, cMonthNum, cYear);
 })
 
 // LOAD IN DATA
@@ -299,4 +317,3 @@ for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
         }
     }
 }
-

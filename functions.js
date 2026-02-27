@@ -232,6 +232,148 @@ function calData(givenDate, givenMonth, givenYear) {
     }
 }
 
+// useful for arrow functions for finding previousMonth, nextMonth etc.
+function monthData(givenDate, givenMonth, givenYear) {
+    totalDays = 0;
+    cMonthDays = 0;
+    previousMonth = ['', 0, 0];  // [Monthname, monthdays, monthnum]
+    nextMonth = ['', 0, 0];      // [Monthname, monthdays, monthnum]
+    let leapYear = checkLeapYear(givenYear);
+
+    for (let i = 1; i <= givenMonth; i++) { //goes through (i + 1) amount of months and adds up total amount of days
+        if (i === 1) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['December', 31, 12];
+            if (leapYear) {
+                nextMonth = ['February', 29, 2];
+            } else {
+                nextMonth = ['February', 28, 2];
+            }
+        } else if (i === 2) {
+            nextMonth = ['March', 31, 3];
+            previousMonth = ['January', 31, 1];
+            // checks if it's a leap year
+            if (leapYear) {
+                if (i < givenMonth) {
+                    totalDays += 29;
+                } else {
+                    totalDays += givenDate;
+                }
+                cMonthDays = 29;
+            } else {
+                if (i < givenMonth) {
+                    totalDays += 28;
+                } else {
+                    totalDays += givenDate;
+                }
+                cMonthDays = 28;
+            }
+        } else if (i === 3) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            nextMonth = ['April', 30, 4];
+            // checks if it's a leap year
+            if (leapYear) {
+                previousMonth = ['February', 29, 2];
+            } else {
+                previousMonth = ['February', 28, 2];
+            }
+        } else if (i === 4) {
+            if (i < givenMonth) {
+                totalDays += 30;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 30;
+            previousMonth = ['March', 31, 3];
+            nextMonth = ['May', 31, 5];
+        } else if (i === 5) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['April', 30, 4];
+            nextMonth = ['June', 30, 6];
+        } else if (i === 6) {
+            if (i < givenMonth) {
+                totalDays += 30;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 30;
+            previousMonth = ['May', 31, 5];
+            nextMonth = ['July', 31, 7];
+        } else if (i === 7) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['June', 30, 6];
+            nextMonth = ['August', 31, 8]
+        } else if (i === 8) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['July', 31, 7];
+            nextMonth = ['September', 30, 9];
+        } else if (i === 9) {
+            if (i < givenMonth) {
+                totalDays += 30;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 30;
+            previousMonth = ['August', 31, 8];
+            nextMonth = ['October', 31, 10];
+        } else if (i === 10) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 31;
+            previousMonth = ['September', 30, 9];
+            nextMonth = ['November', 30, 11];
+        } else if (i === 11) {
+            if (i < givenMonth) {
+                totalDays += 30;
+            } else {
+                totalDays += givenDate;
+            }
+            cMonthDays = 30;
+            previousMonth = ['October', 31, 10];
+            nextMonth = ['December', 31, 12];
+        } else if (i === 12) {
+            if (i < givenMonth) {
+                totalDays += 31;
+            } else {
+                totalDays += givenDate;
+            }
+            previousMonth = ['November', 30, 11];
+            nextMonth = ['January', 31, 1];
+            cMonthDays = 31;
+        }
+    }
+
+    return [previousMonth, nextMonth];
+}
+
 // function finds the week of the given date info and displays it in the week title on the webpage and also returns the entire week dates in an array
 function displayWeek(given_Date, given_Month, given_Year) {
     // CODE THAT DISPLAYS THE WEEK TITLE
@@ -272,6 +414,7 @@ function displayWeek(given_Date, given_Month, given_Year) {
     let dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     findWeekDates(given_Date, given_Month, given_Year);  // !! Important to assign cDate , cMonth, cYear for every switch in calendar placement for them to then be placed as parameters inside of the DisplayWeek function.
     cDaysDisplay.forEach((el, i) => el.textContent = `${dayNames[i]}. ${cWeekDates[i]}`);
+    
 }
 
 //creation of info data about the event (to then save in the calendar database)
@@ -595,4 +738,4 @@ function eventOverlap( givenTime, givenFullDate, givenData ) {
     return overlap;
 }
 
-export { checkLeapYear, getMonthName, calData, displayWeek, findDate, findWeekDates, findWeek, findRanWeekDay, sameWeek, extractFromDate, findDayInWeek, eventOverlap };
+export { checkLeapYear, getMonthName, calData, monthData, displayWeek, findDate, findWeekDates, findWeek, findRanWeekDay, sameWeek, extractFromDate, findDayInWeek, eventOverlap };
