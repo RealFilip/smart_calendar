@@ -244,6 +244,29 @@ previousWeek.addEventListener("click", () => {
     displayWeek(cDate, cMonthNum, cYear);
 })
 
+//arrow right (next week)
+nextWeek.addEventListener("click", () => {
+    // array with the data of the next month [monthName, monthDays, monthNum]
+    const nextMonth = monthData(cDate, cMonthNum, cYear)[1];
+
+    // adjusts the cDate/cMonthNum/cYear accordingly
+    if ((cDate + 7) <= nextMonth[1] ) {
+        cDate += 7;
+    } else if (cDate + 7 > nextMonth[1]) {
+        // checks if the next month is january and adjusts the year if it's the case
+        if (nextMonth[2] === 1) {
+            cYear += 1;
+        }
+        // adjusts the month
+        cMonthNum = nextMonth[2];
+        
+        // adjusts the date to the nextmonth days number - current date + a week
+        cDate = nextMonth[1] - cDate + 7;
+    }
+
+    displayWeek(cDate, cMonthNum, cYear);
+})
+
 // LOAD IN DATA
 let calendarData = {};  //predefines the main data variable 
 // finds saved data or starts from scratch if none found
