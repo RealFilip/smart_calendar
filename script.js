@@ -248,11 +248,14 @@ previousWeek.addEventListener("click", () => {
 nextWeek.addEventListener("click", () => {
     // array with the data of the next month [monthName, monthDays, monthNum]
     const nextMonth = monthData(cDate, cMonthNum, cYear)[1];
+    // array with the number of the current month days
+    const cMonth = monthData(cDate, cMonthNum, cYear)[2];
 
     // adjusts the cDate/cMonthNum/cYear accordingly
-    if ((cDate + 7) <= nextMonth[1] ) {
+    if ((cDate + 7) <= cMonth ) {
         cDate += 7;
-    } else if (cDate + 7 > nextMonth[1]) {
+    } else if (cDate + 7 > cMonth) {
+        console.log(`: ${cMonth}`);
         // checks if the next month is january and adjusts the year if it's the case
         if (nextMonth[2] === 1) {
             cYear += 1;
@@ -261,7 +264,7 @@ nextWeek.addEventListener("click", () => {
         cMonthNum = nextMonth[2];
         
         // adjusts the date to the nextmonth days number - current date + a week
-        cDate = nextMonth[1] - cDate + 7;
+        cDate = cDate - nextMonth[1] + 7;
     }
 
     displayWeek(cDate, cMonthNum, cYear);

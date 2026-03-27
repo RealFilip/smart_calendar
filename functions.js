@@ -371,7 +371,7 @@ function monthData(givenDate, givenMonth, givenYear) {
         }
     }
 
-    return [previousMonth, nextMonth];
+    return [previousMonth, nextMonth, cMonthDays];
 }
 
 // function finds the week of the given date info and displays it in the week title on the webpage and also returns the entire week dates in an array
@@ -389,7 +389,7 @@ function displayWeek(given_Date, given_Month, given_Year) {
         cDayInWeekNum -= 1; 
     }
 
-    let cWeek = Math.floor(((totalDays + firstDayDatabase[given_Year]) / 7) + 1);
+    let cWeek = findWeek(given_Date, given_Month, given_Year);
 
     // code to calculate this weeks monday and this weeks sunday, and display the dates after
     let cWeekMondayDate;
