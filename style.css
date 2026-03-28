@@ -182,6 +182,11 @@ header img {
     z-index: 2;
 }
 
+/* grid centering */
+.grid, .deco-grid {
+    justify-self: center;
+}
+
 
 /*Classes that are toggled / added to elements through js */
 .new-event {
