@@ -44,10 +44,17 @@ header img {
     cursor: pointer;
 }
 
-.add-event {
+.calendar-pannel {
     position: absolute;
     justify-self: center;
-    margin-top: 5rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    align-content: center;
+    padding: 5rem 0;
+}
+
+.calendar-pannel button {
     width: 7rem;
     font-size: 1.1rem;
     font-weight: 600;

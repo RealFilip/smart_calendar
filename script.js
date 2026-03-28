@@ -46,6 +46,7 @@ let cWeek = findWeek(cDate, cMonthNum, cYear);
 
 // add event to calendar
 const addEventBtn = document.getElementById("add-event");
+const calPannel = document.getElementById("calendar-pannel");
 const eventDesc = document.querySelectorAll(".event-desc");
 const createEventBtn = document.getElementById("create-event");
 const groupInput = document.getElementById("group");
@@ -64,7 +65,7 @@ const previousWeek = document.getElementById("week-before");
 const nextWeek = document.getElementById("week-after");
 
 addEventBtn.addEventListener("click", () => {
-    addEventBtn.style.display = 'none';
+    calPannel.style.display = 'none';
     eventDesc.forEach(el => { el.style.display = 'grid' });
 })
 
@@ -219,61 +220,53 @@ createEventBtn.addEventListener("click", () => {
 
 })
 
-// calendar navigation
-
-//arrow left (previous week)
-previousWeek.addEventListener("click", () => {
-    // array with the data of the previous month [monthName, monthDays, monthNum]
-    const prevMonth = monthData(cDate, cMonthNum, cYear)[0];
-
-    // adjusts the cDate/cMonthNum/cYear accordingly
-    if ((cDate - 7) > 0 ) {
-        cDate -= 7;
-    } else if (cDate - 7 <= 0) {
-        // checks if the previous month was december and adjusts the year if it's the case
-        if (prevMonth[2] === 12) {
-            cYear -= 1;
-        }
-        // adjusts the month
-        cMonthNum = prevMonth[2];
-        
-        // adjusts the date to the previousmonth days number + current date - a week
-        cDate = prevMonth[1] + cDate - 7;
-    }
-
-    displayWeek(cDate, cMonthNum, cYear);
-})
-
-//arrow right (next week)
-nextWeek.addEventListener("click", () => {
-    // array with the data of the next month [monthName, monthDays, monthNum]
-    const nextMonth = monthData(cDate, cMonthNum, cYear)[1];
-    // array with the number of the current month days
-    const cMonth = monthData(cDate, cMonthNum, cYear)[2];
-
-    console.log(`${cDate}, ${cMonthNum}, ${cYear}`);
-    // adjusts the cDate/cMonthNum/cYear accordingly
-    if ((cDate + 7) <= cMonth ) {
-        cDate += 7;
-    } else if (cDate + 7 > cMonth) {
-        console.log(`: ${cMonth}`);
-        // checks if the next month is january and adjusts the year if it's the case
-        if (nextMonth[2] === 1) {
-            cYear += 1;
-        }
-        // adjusts the month
-        cMonthNum = nextMonth[2];
-        
-        // adjusts the date to the nextmonth days number - current date + a week
-        cDate = cDate - cMonth + 7;
-    }
-
-    // for testing: 
-    // console.log(`${cDate}, ${cMonthNum}, ${cYear}`);
-    displayWeek(cDate, cMonthNum, cYear);
-})
-
 // LOAD IN DATA
+// function that loops through each saved group and checks if any saved events are in the current week
+function displayEvents (gDate, gMonthNum, gYear) {
+    for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
+        // assigns all events of the i-th group
+        let getGroupName = calendarData.groups.groupNames[i];
+        let groupEvents = calendarData.groups[getGroupName].events;
+
+        // loop to go through every event in the i-th group
+        for (let y = 0; y < groupEvents.length; y++) {
+            let groupEvent = groupEvents[y];
+            let eventDate = calendarData.all_events[groupEvent].date;
+
+            //extract just date, just month, just year
+            let eventDay = extractFromDate("date", eventDate);
+            let eventMonth = extractFromDate("month", eventDate);
+            let eventYear = extractFromDate("year", eventDate);
+
+            //check if the date is in the current week
+            if (sameWeek(`${eventDay}/${eventMonth}/${eventYear}`, `${gDate}/${gMonthNum}/${gYear}`)) {
+                let newEvent = document.createElement('p');
+                newEvent.classList.add("new-event");
+                addEventBtn.style.display = 'block';
+                newEvent.style.backgroundColor = calendarData.groups[getGroupName].color;
+                newEvent.textContent = calendarData.all_events[groupEvent].desc;
+
+                //calculation of event coordinates in the calendar grid
+                let fTN = Number((calendarData.all_events[groupEvent].time).match(/\d+/)[0]);         // from time num
+                let tTN = Number((calendarData.all_events[groupEvent].time).match(/\d+(?!.*\d)/)[0]); // to time num
+                let deltaTN = tTN - fTN;
+
+                console.log(findDayInWeek(eventDay, eventMonth, eventYear));
+                newEvent.style.marginLeft = `${findDayInWeek(eventDay, eventMonth, eventYear) * 6 + 1}rem`;
+                newEvent.style.marginTop = `${fTN}rem`;
+                newEvent.style.height = `${deltaTN}rem`;
+                grid.appendChild(newEvent);
+            }
+        }
+    }
+}
+
+// function that hides all displayed events
+function hideEvents () {
+    let newEvents = document.querySelectorAll(".new-event");
+    newEvents.forEach(el => { el.style.display = 'none' });
+}
+
 let calendarData = {};  //predefines the main data variable 
 // finds saved data or starts from scratch if none found
 if (!localStorage.getItem("sm-calendar-data")) {
@@ -304,45 +297,73 @@ if (!localStorage.getItem("sm-calendar-data")) {
 } else {
     calendarData = JSON.parse(localStorage.getItem("sm-calendar-data"));
 }
-// loads in saved data if existing
-for (let i = 0; i < calendarData.eventNum; i++) {} 
 
 displayWeek(cDate, cMonthNum, cYear); //gets week dates
 
-// loops through each saved group and checks if any saved events are in the current week
-for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
-    // assigns all events of the i-th group
-    let getGroupName = calendarData.groups.groupNames[i];
-    let groupEvents = calendarData.groups[getGroupName].events;
+// loads existing data
+displayEvents(cDate, cMonthNum, cYear);
 
-    // loop to go through every event in the i-th group
-    for (let y = 0; y < groupEvents.length; y++) {
-        let groupEvent = groupEvents[y];
-        let eventDate = calendarData.all_events[groupEvent].date;
 
-        //extract just date, just month, just year
-        let eventDay = extractFromDate("date", eventDate);
-        let eventMonth = extractFromDate("month", eventDate);
-        let eventYear = extractFromDate("year", eventDate);
 
-        //check if the date is in the current week
-        if (sameWeek(`${eventDay}/${eventMonth}/${eventYear}`, `${cDate}/${cMonthNum}/${cYear}`)) {
-            let newEvent = document.createElement('p');
-            newEvent.classList.add("new-event");
-            addEventBtn.style.display = 'block';
-            newEvent.style.backgroundColor = calendarData.groups[getGroupName].color;
-            newEvent.textContent = calendarData.all_events[groupEvent].desc;
+// CALENDAR NAVIGATION
+//arrow left (previous week)
+previousWeek.addEventListener("click", () => {
+    // array with the data of the previous month [monthName, monthDays, monthNum]
+    const prevMonth = monthData(cDate, cMonthNum, cYear)[0];
 
-            //calculation of event coordinates in the calendar grid
-            let fTN = Number((calendarData.all_events[groupEvent].time).match(/\d+/)[0]);         // from time num
-            let tTN = Number((calendarData.all_events[groupEvent].time).match(/\d+(?!.*\d)/)[0]); // to time num
-            let deltaTN = tTN - fTN;
-
-            console.log(findDayInWeek(eventDay, eventMonth, eventYear));
-            newEvent.style.marginLeft = `${findDayInWeek(eventDay, eventMonth, eventYear) * 6 + 1}rem`;
-            newEvent.style.marginTop = `${fTN}rem`;
-            newEvent.style.height = `${deltaTN}rem`;
-            grid.appendChild(newEvent);
+    // adjusts the cDate/cMonthNum/cYear accordingly
+    if ((cDate - 7) > 0 ) {
+        cDate -= 7;
+    } else if (cDate - 7 <= 0) {
+        // checks if the previous month was december and adjusts the year if it's the case
+        if (prevMonth[2] === 12) {
+            cYear -= 1;
         }
+        // adjusts the month
+        cMonthNum = prevMonth[2];
+        
+        // adjusts the date to the previousmonth days number + current date - a week
+        cDate = prevMonth[1] + cDate - 7;
     }
-}
+
+    // hides events from previous week
+    hideEvents();
+
+    // loads in current events
+    displayEvents(cDate, cMonthNum, cYear);
+
+    // displays new week
+    displayWeek(cDate, cMonthNum, cYear);
+})
+
+//arrow right (next week)
+nextWeek.addEventListener("click", () => {
+    // array with the data of the next month [monthName, monthDays, monthNum]
+    const nextMonth = monthData(cDate, cMonthNum, cYear)[1];
+    // array with the number of the current month days
+    const cMonth = monthData(cDate, cMonthNum, cYear)[2];
+
+    // adjusts the cDate/cMonthNum/cYear accordingly
+    if ((cDate + 7) <= cMonth ) {
+        cDate += 7;
+    } else if (cDate + 7 > cMonth) {
+        // checks if the next month is january and adjusts the year if it's the case
+        if (nextMonth[2] === 1) {
+            cYear += 1;
+        }
+        // adjusts the month
+        cMonthNum = nextMonth[2];
+        
+        // adjusts the date to the nextmonth days number - current date + a week
+        cDate = cDate - cMonth + 7;
+    }
+
+    // hides events from previous week
+    hideEvents();
+
+    // loads in current events
+    displayEvents(cDate, cMonthNum, cYear);
+
+    // displays new week
+    displayWeek(cDate, cMonthNum, cYear);
+});
