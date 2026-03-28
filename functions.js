@@ -460,6 +460,10 @@ function findDate() {
 // function to find the dates for every day of the week of the given date
 function findWeekDates(given__Date, given__Month, given__Year) {
     cWeekDates = [];
+
+    // variable for sending the month of the first day of the week (needed for the sameWeek function, for comparing the month of the weeks correclty)
+    let firstDayMonth;
+
     // gets multiple needed values; cMonthDays, previousMonth, nextMonth, totalDays 
     calData(given__Date, given__Month, given__Year);
 
@@ -478,13 +482,19 @@ function findWeekDates(given__Date, given__Month, given__Year) {
     if (given__Date > cDayInWeekNum && (given__Date + 6 - cDayInWeekNum) <= cMonthDays) {
         // runs if the given__Date's week start and end are within the current month
         cWeekMondayDate = given__Date - cDayInWeekNum;
+        // saves the month num of monday
+        firstDayMonth = given__Month; 
     } else if (given__Date <= cDayInWeekNum) {
         // runs if the start of the given__Date's week is in the previous month
         cWeekMondayDate = previousMonth[1] + given__Date - cDayInWeekNum;
         cMonthDays = previousMonth[1];
+        // saves the month num of monday
+        firstDayMonth = previousMonth[2];
     } else if (cMonthDays < (given__Date + 6 - cDayInWeekNum)) {
         // runs if the given__Date's week is within the next month
         cWeekMondayDate = given__Date - cDayInWeekNum;
+        // saves the month num of monday
+        firstDayMonth = nextMonth[2];
     }
 
     cWeekDates.push(cWeekMondayDate);
@@ -498,7 +508,10 @@ function findWeekDates(given__Date, given__Month, given__Year) {
         }
     }
 
-    return (cWeekDates);
+    // Pushes the 8th element of cWeekDates as the monthnum of the monday
+    cWeekDates.push(firstDayMonth);
+    
+    return cWeekDates;
 }
 
 // function to find the week number of a given date
@@ -640,7 +653,6 @@ function findWeek(givenDate, givenMonth, givenYear) {
         }
     }
 
-    console.log(`This: (${totalDays} + ${firstDayDatabase[givenYear]})/7 + 1, year: ${givenYear}, gives ${Math.floor(((totalDays + firstDayDatabase[givenYear]) / 7) + 1)}`);
     // totaldays - 1 to get the first day of the year to be 0, + the first day of the year(0 if monday, 6 if sunday) divide by 7 and + 1 for offset since math.floor.
     return Math.floor(((totalDays - 1 + firstDayDatabase[givenYear]) / 7) + 1);
 }
@@ -661,7 +673,9 @@ function sameWeek(date1, date2) {
     // returns the result 
     let comparison = true;
     for (let i = 0; i < 7; i++) {
-        if (compWeek1[i] !== compWeek2[i]) {
+
+        // comparison false if any of the following is false: week date not matching, months not matching, years not matching
+        if (compWeek1[i] !== compWeek2[i] || compWeek1[7] !== compWeek2[7] || extractFromDate("year", date1) !== extractFromDate("year", date2)) {
             comparison = false;
         }
     }
