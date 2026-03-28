@@ -251,6 +251,7 @@ nextWeek.addEventListener("click", () => {
     // array with the number of the current month days
     const cMonth = monthData(cDate, cMonthNum, cYear)[2];
 
+    console.log(`${cDate}, ${cMonthNum}, ${cYear}`);
     // adjusts the cDate/cMonthNum/cYear accordingly
     if ((cDate + 7) <= cMonth ) {
         cDate += 7;
@@ -264,9 +265,11 @@ nextWeek.addEventListener("click", () => {
         cMonthNum = nextMonth[2];
         
         // adjusts the date to the nextmonth days number - current date + a week
-        cDate = cDate - nextMonth[1] + 7;
+        cDate = cDate - cMonth + 7;
     }
 
+    // for testing: 
+    // console.log(`${cDate}, ${cMonthNum}, ${cYear}`);
     displayWeek(cDate, cMonthNum, cYear);
 })
 

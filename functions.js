@@ -388,7 +388,7 @@ function displayWeek(given_Date, given_Month, given_Year) {
     } else { 
         cDayInWeekNum -= 1; 
     }
-
+    
     let cWeek = findWeek(given_Date, given_Month, given_Year);
 
     // code to calculate this weeks monday and this weeks sunday, and display the dates after
@@ -640,7 +640,9 @@ function findWeek(givenDate, givenMonth, givenYear) {
         }
     }
 
-    return Math.floor(((totalDays + firstDayDatabase[givenYear]) / 7) + 1);
+    console.log(`This: (${totalDays} + ${firstDayDatabase[givenYear]})/7 + 1, year: ${givenYear}, gives ${Math.floor(((totalDays + firstDayDatabase[givenYear]) / 7) + 1)}`);
+    // totaldays - 1 to get the first day of the year to be 0, + the first day of the year(0 if monday, 6 if sunday) divide by 7 and + 1 for offset since math.floor.
+    return Math.floor(((totalDays - 1 + firstDayDatabase[givenYear]) / 7) + 1);
 }
 
 // used for finding the date of a given week
