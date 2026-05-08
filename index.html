@@ -5,15 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Calendar</title>
     <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="./images/icon.png">
+    <link rel="icon" href="./images/smart-functions.png">
 </head>
 <body>
     <header>
-        <img src="./images/icon.png" alt="smart calendar icon">
+        <img src="./images/smart-functions.png" alt="smart calendar icon" id="smart-functions">
         <h1>Smart Calendar</h1>
         <img src="./images/customization.png" alt="customization button">
     </header>
     <hr>
+    <main class="smart-functions">
+        <div class="buttons">
+            <button id="event-search">Event Search</button>
+            <button id="date-search">Search by Date</button>
+            <button id="group-search">Group Search</button>
+            <button id="group-settings">Group Settings</button>
+            <button id="event-presets">Event Presets</button>
+            <button id="weekly-scheduling">Weekly Scheduling</button>
+        </div>
+    </main>
     <main class="calendar">
         <div class="date">
             <img class="week-before" id="week-before" src="./images/arrow-left.png" alt="arrow to week before">
@@ -190,6 +200,7 @@
         <img src="./images/calendar-grid.png" class="deco-grid"></img>
     </main>
 
+    <!--Smart functions area, only visible when smart-functions button pressed-->
     <div class="smart-functions"></div>
 
     <script type="module" src="./script.js" defer></script>

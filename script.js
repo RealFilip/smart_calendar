@@ -45,6 +45,8 @@ const firstDayDatabase = {
 let cWeek = findWeek(cDate, cMonthNum, cYear);
 
 // add event to calendar
+const smartFunBtn = document.getElementById("smart-functions");
+const title = document.querySelector('h1');
 const addEventBtn = document.getElementById("add-event");
 const calPannel = document.getElementById("calendar-pannel");
 const eventDesc = document.querySelectorAll(".event-desc");
@@ -56,14 +58,18 @@ const chooseFrom = document.getElementById("choose-from");
 const chooseTo = document.getElementById("choose-to");
 const errorEventCreation = document.getElementById("error-event-creation");
 const grid = document.querySelector('.grid');
+const decoGrid = document.querySelector('.deco-grid');
+const datePannel = document.querySelector('.date');
 const colorChoice = document.getElementById("color-choice");
 const colorPicker = document.getElementById("color-picker");
 const colorOkButton = document.getElementById("color-ok-button");
+const smartFun = document.querySelector('.smart-functions');
 
 // arrows
 const previousWeek = document.getElementById("week-before");
 const nextWeek = document.getElementById("week-after");
 
+// opens the eventDesc where the user chooses the info about the new event 
 addEventBtn.addEventListener("click", () => {
     calPannel.style.display = 'none';
     eventDesc.forEach(el => { el.style.display = 'grid' });
@@ -86,7 +92,7 @@ descInput.addEventListener("input", () => {
 let xEvent;
 let yEvent;
 
-//creating a new event to the current week
+// creating a new event to the current week
 createEventBtn.addEventListener("click", () => {
     // CODE TO CHECK IF GIVEN INFO BY USER IS VALID
     
@@ -157,6 +163,7 @@ createEventBtn.addEventListener("click", () => {
 
         // CODE FOR HIDING THE EVENT CREATION AND PUTTING BACK THE "ADD EVENT" BUTTON
         eventDesc.forEach(el => { el.style.display = 'none' });
+        calPannel.style.display = 'none';
         errorEventCreation.style.display = 'none';
 
         // CODE FOR THE CREATION OF THE EVENT
@@ -173,32 +180,40 @@ createEventBtn.addEventListener("click", () => {
             colorChoice.style.display = 'grid';
 
             // adds the new group to the groupName array that keeps track of all group names ( needed for the for loop to load in the data )
-            calendarData.groups.groupNames.push(groupInput.value);
+            calendarData.groupNames.push(groupInput.value);
             
             colorOkButton.addEventListener("click", () => {
-                // saves the chosen color, removes the color-choice div and shows the add event button
+                // saves the chosen color
                 color = colorPicker.value;
-                colorChoice.style.display = 'none';
-                addEventBtn.style.display = 'block';
 
                 // adds the chosen color and adds the new group to the calendar database
                 newEvent.style.backgroundColor = color;
 
+                // adds the event details in the all_events database
                 calendarData.all_events[eventName] = {
                     date: findDate(),
                     time: `${chooseFrom.value} --> ${chooseTo.value}`,
                     desc: descInput.value
                 }
 
+                // adds the new group to the calendarData database
                 calendarData.groups[groupInput.value] = {
                     color: color,
                     events: [eventName]
                 }
 
+                // saves data early (otherwise the localStorage.setItem outside runs before...)
+                localStorage.setItem("sm-calendar-data", JSON.stringify(calendarData));
+
+                // removes the color-choice div and shows the add event button
+                colorChoice.style.display = 'none';
+                calPannel.style.display = 'flex';
+
             }, {once: true}); // makes sure that this event listener for the specific element gets deactivated after one use, to avoid color confusion (all elements adapting the new color chosen)
         } else {
-            addEventBtn.style.display = 'block';
+            calPannel.style.display = 'flex';
             newEvent.style.backgroundColor = color;
+
             //adds new event data to the already existing group
             calendarData.all_events[eventName] = {
                 date: findDate(),
@@ -223,9 +238,9 @@ createEventBtn.addEventListener("click", () => {
 // LOAD IN DATA
 // function that loops through each saved group and checks if any saved events are in the current week
 function displayEvents (gDate, gMonthNum, gYear) {
-    for (let i = 0; i < calendarData.groups.groupNames.length; i++) {
+    for (let i = 0; i < calendarData.groupNames.length; i++) {
         // assigns all events of the i-th group
-        let getGroupName = calendarData.groups.groupNames[i];
+        let getGroupName = calendarData.groupNames[i];
         let groupEvents = calendarData.groups[getGroupName].events;
 
         // loop to go through every event in the i-th group
@@ -273,9 +288,10 @@ if (!localStorage.getItem("sm-calendar-data")) {
         // totalt amount of events
         eventNum: 1,
         
+        groupNames: ["sport"],
+
         // groups object for the different groups created by the user
         groups: {
-            groupNames: ["sport"],
 
             sport: {
                 color: "orange",
@@ -305,7 +321,57 @@ displayEvents(cDate, cMonthNum, cYear);
 
 
 // CALENDAR NAVIGATION
-//arrow left (previous week)
+
+//smart functions switch (true if smart functions open)
+let sfSwitch = false;
+// open smart functions
+smartFunBtn.addEventListener("click", () => {
+    if (!sfSwitch) {
+        // registers smart functions open
+        sfSwitch = true;
+
+        // HIDES MAIN PAGE  
+        calPannel.style.display = 'none';  // hides the add/edit event buttons
+        hideEvents();                      // hides the events of the current week
+        decoGrid.style.display = 'none';   // hides the visual grid
+        grid.style.display = 'none';       // hides the actual grid with text (no border)
+        datePannel.style.display = 'none'; // hides the date display with the arrows
+
+        // changes page title
+        document.title = 'Smart Functions';
+        title.textContent = 'Smart Functions';
+
+        //changes header icon
+        smartFunBtn.src = './images/smart-calendar.png';
+
+        // LOADS SMART FUNCTIONS PAGE
+        smartFun.style.display = 'flex';
+    } else {
+        // registers smart functions closed
+        sfSwitch = false;
+
+        // HIDES SMART FUNCTIONS
+        smartFun.style.display = 'none';
+        
+        // REVEALS MAIN PAGE
+        calPannel.style.display = 'flex';  // add/edit event buttons
+        hideEvents();                      // events of the current week
+        decoGrid.style.display = 'inline-block';   // visual grid
+        grid.style.display = 'grid';       // actual grid with text (no border)
+        datePannel.style.display = 'grid'; // date display with the arrows
+
+        // changes page title
+        document.title = 'Smart Calendar';
+        title.textContent = 'Smart Calendar';
+
+        //changes header icon
+        smartFunBtn.src = './images/smart-functions.png';
+    }
+
+
+})
+
+// arrow left (previous week)
 previousWeek.addEventListener("click", () => {
     // array with the data of the previous month [monthName, monthDays, monthNum]
     const prevMonth = monthData(cDate, cMonthNum, cYear)[0];
@@ -335,7 +401,7 @@ previousWeek.addEventListener("click", () => {
     displayWeek(cDate, cMonthNum, cYear);
 })
 
-//arrow right (next week)
+// arrow right (next week)
 nextWeek.addEventListener("click", () => {
     // array with the data of the next month [monthName, monthDays, monthNum]
     const nextMonth = monthData(cDate, cMonthNum, cYear)[1];

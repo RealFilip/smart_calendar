@@ -18,6 +18,36 @@ header img {
     cursor: pointer;
 }
 
+/*SMART FUNCTIONS CLASSES*/
+.smart-functions {
+    display: none;
+    position: absolute;
+    height: 20rem;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+
+.buttons button {
+    height: 3rem;
+    width: 14rem;
+    font-size: 1.4rem;
+    border: 0.2rem solid rgb(2, 0, 28);
+    border-radius: 0.8rem;
+    margin: 2rem;
+    color: rgb(1, 5, 61);
+    background-color: rgb(156, 161, 180);
+}
+
+
+/*CALENDAR CLASSES*/
+
 .calendar {
     display: grid;
     grid-template-rows: 1fr 2fr 13fr;

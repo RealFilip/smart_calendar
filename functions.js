@@ -423,8 +423,10 @@ function displayWeek(given_Date, given_Month, given_Year) {
 
 //creation of info data about the event (to then save in the calendar database)
 function findDate() {
-    // calculates current day of the week as a number, 0 is monday, 6 is sunday
+    calData(cDate, cMonthNum, cYear);  //get totaldays etc.
+    // calculates current day of the week as a number, 0 is sunday, 6 is saturday
     let cDayInWeekNum = (totalDays + firstDayDatabase[cYear]) % 7;
+    // adjusts the cdayinweek to go from 0-6 (instead of 1-7)
     if (cDayInWeekNum === 0) { // it's a sunday
         cDayInWeekNum = 6;
     } else { 
